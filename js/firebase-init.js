@@ -2,14 +2,15 @@ import { initializeApp } from "https://www.gstatic.com/firebasejs/10.8.0/firebas
 import { initializeFirestore, persistentLocalCache, persistentMultipleTabManager } from "https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore.js";
 
 const firebaseConfig = {
-  apiKey: "AIzaSyDpiy6wmmqwum9KApTLGshsQqT-raOyu4Q",
-  authDomain: "sisfo-d1fed.firebaseapp.com",
-  projectId: "sisfo-d1fed",
-  storageBucket: "sisfo-d1fed.firebasestorage.app",
-  messagingSenderId: "729511197052",
-  appId: "1:729511197052:web:6ed208ce102144295b0cf9",
-  measurementId: "G-FL7KZ4E684"
+  apiKey: "AIzaSyByZ_DonYkuyBRLDg3AJc7PLrPxFDoVNt8",
+  authDomain: "mtsabm.firebaseapp.com",
+  projectId: "mtsabm",
+  storageBucket: "mtsabm.firebasestorage.app",
+  messagingSenderId: "927343481008",
+  appId: "1:927343481008:web:f92cfabd8b4c3a93336b75",
+  measurementId: "G-V9GKRQ0FXV"
 };
+
 
 // Inisialisasi Firebase App
 export const app = initializeApp(firebaseConfig);
