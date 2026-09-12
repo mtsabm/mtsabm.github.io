@@ -1377,7 +1377,9 @@ window.simpanAbsenLain = async function(event, tipe, status) {
     const gpsValid = await window.validasiGPS(lembaga);
     if (!gpsValid) { btn.innerHTML = oriHTML; btn.disabled = false; return; }
 
-    const now = new Date(); const dateStr = window.getLocalISOString(); 
+    const now = new Date(); 
+    const inputTglLonggar = document.getElementById('input-tanggal-presensi-longgar')?.value;
+    const dateStr = (lembaga.kedisiplinan === 'Longgar' && inputTglLonggar) ? inputTglLonggar : window.getLocalISOString(); 
     const curMins = window.waktuKeMenit(now.toLocaleTimeString('id-ID', { hour: '2-digit', minute:'2-digit' }));
     const sessionUser = window.currentUser;
     const jabatanSel = document.getElementById('pilih-jabatan-absen');
@@ -1517,7 +1519,8 @@ window.simpanPresensiKelas = async function(event, mode) {
     const namaGuruAsli = valSplits[5] || '';
     
     let keterangan = document.getElementById(inputKetId).value || '';
-    const dateStr = window.getLocalISOString();
+    const inputTglLonggar = document.getElementById('input-tanggal-presensi-longgar')?.value;
+    const dateStr = (lembaga.kedisiplinan === 'Longgar' && inputTglLonggar) ? inputTglLonggar : window.getLocalISOString();
     const sessionUser = window.currentUser;
 
     try {
@@ -1979,11 +1982,17 @@ export async function renderHalamanAbsensi(container) {
     }
 
     container.innerHTML = `
-        <div class="bg-gradient-to-r from-slate-800 to-slate-900 p-8 rounded-2xl shadow-xl mb-8 text-center border-b-4 border-indigo-500 relative overflow-hidden">
-            <div class="absolute top-0 right-0 opacity-10"><i class="fa-solid fa-clock text-9xl -mt-4 -mr-4"></i></div>
-            <h2 class="text-indigo-300 font-semibold tracking-wider text-sm mb-2 uppercase">Waktu Presensi Saat Ini</h2>
-            <p id="jam-realtime" class="text-5xl md:text-6xl font-black text-white tracking-widest drop-shadow-lg mb-2">00:00:00</p>
-            <p id="tgl-realtime" class="text-lg md:text-xl font-medium text-slate-300">Memuat Tanggal...</p>
+        <div class="bg-gradient-to-r from-slate-800 to-slate-900 px-4 py-3 md:px-6 md:py-3.5 rounded-xl shadow-md mb-5 text-center border-b-2 border-indigo-500 relative overflow-hidden flex flex-col md:flex-row items-center justify-between gap-2">
+            <div class="flex items-center gap-3">
+                <i class="fa-solid fa-clock text-xl md:text-2xl text-indigo-400"></i>
+                <div class="text-left">
+                    <span class="text-indigo-300 font-bold tracking-wider text-[10px] md:text-xs uppercase block">Waktu Saat Ini</span>
+                    <span id="tgl-realtime" class="text-xs md:text-sm font-semibold text-slate-300">Memuat Tanggal...</span>
+                </div>
+            </div>
+            <div class="bg-slate-950/50 px-4 py-1.5 rounded-lg border border-slate-700/60 shadow-inner">
+                <p id="jam-realtime" class="text-2xl md:text-3xl font-black text-white tracking-widest font-mono">00:00:00</p>
+            </div>
         </div>
 
         ${rapatHTML}
@@ -2012,9 +2021,15 @@ export async function renderHalamanAbsensi(container) {
                     </div>
                     ` : `
                     ${lembaga.kedisiplinan === 'Longgar' ? `
-                    <div class="mb-6 bg-orange-50 border border-orange-200 p-4 rounded-xl">
-                        <label class="font-bold text-xs text-orange-800 block mb-1">Disiplin Longgar: Input Manual Keterlambatan (Menit):</label>
-                        <input type="number" id="input-keterlambatan-manual" placeholder="0 (Kosongkan jika tepat waktu)" class="border border-orange-300 p-2 rounded-lg w-full max-w-xs focus:outline-orange-500 font-bold text-orange-900 bg-white">
+                    <div class="mb-6 bg-orange-50 border border-orange-200 p-4 rounded-xl grid grid-cols-1 md:grid-cols-2 gap-4">
+                        <div>
+                            <label class="font-bold text-xs text-orange-800 block mb-1"><i class="fa-solid fa-calendar-day mr-1"></i> Tanggal Presensi (Bebas Dipilih):</label>
+                            <input type="date" id="input-tanggal-presensi-longgar" value="${todayISO}" class="border border-orange-300 p-2 rounded-lg w-full focus:outline-orange-500 font-bold text-orange-900 bg-white cursor-pointer shadow-sm">
+                        </div>
+                        <div>
+                            <label class="font-bold text-xs text-orange-800 block mb-1"><i class="fa-solid fa-stopwatch mr-1"></i> Input Keterlambatan (Menit):</label>
+                            <input type="number" id="input-keterlambatan-manual" placeholder="0 (Kosongkan jika tepat waktu)" class="border border-orange-300 p-2 rounded-lg w-full focus:outline-orange-500 font-bold text-orange-900 bg-white shadow-sm">
+                        </div>
                     </div>` : ''}
 
                     ${opsiJabatan ? `
